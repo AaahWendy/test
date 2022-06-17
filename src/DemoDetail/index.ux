@@ -1,0 +1,75 @@
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div class="demo-page">
+    <text class="title">{{text}}\n</text>
+    <text class="news">{{num}}</text>
+    <input class="bu" type="button" value="刷新" onclick="ok" />
+  </div>
+</template>
+
+<script>
+import fetch from '@system.fetch'
+import prompt from '@system.prompt'
+export default {
+  public: {
+    text: '请按刷新键查看\n此队伍当前的人数',
+    num:'',
+  },
+
+  onMenuPress() {
+    this.$app.$def.showMenu()
+  },
+  onInit() {
+    console.info('new:'+this.num)
+    console.info('url:'+this.url)
+
+  },
+
+  ok(){ 
+    fetch.fetch({//刷新数据 
+      url: 'http://192.168.0.100:8080/TestSever_war_exploded/test?parameter1=2',           
+      resopnType:'text',
+      method:'GET',
+      success: function (data){
+        this.new=data.data 
+        prompt.showToast({
+          message: '刷新成功\n该队列中排队人数为'+this.new,
+          duration:1
+        })       
+      },
+      fail:function(){
+        prompt.showToast({
+          message: '刷新失败',
+        })
+      },   
+    })
+  }
+}
+</script>
+
+<style>
+  .demo-page {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 40px;
+    text-align: center;
+  }
+  .news{
+    font-size: 60px;
+    text-align: center;
+    color: rgb(233, 14, 14);
+  }
+  .bu{
+    width: 550px;
+    height: 86px;
+    margin-top: 75px;
+    border-radius: 43px;
+    background-color: #09ba07;
+    font-size: 30px;
+    color: #ffffff;
+  }
+</style>
